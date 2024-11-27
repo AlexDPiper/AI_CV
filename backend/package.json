@@ -1,0 +1,25 @@
+{
+  "name": "ai_cv",
+  "version": "1.0.0",
+  "description": "AI CV backend",
+  "main": "main.ts",
+  "author": "Alex Dudarev",
+  "license": "MIT",
+  "private": true,
+
+  "scripts": {
+    "dev": "nodemon"
+  },
+
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.0",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.4.1",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  }
+}
