@@ -1,0 +1,49 @@
+.chat-container {
+	--chat-container-width: 600px;
+	display: flex;
+	gap: 5px;
+	position: fixed;
+	bottom: 10px;
+	left: calc(50% - (var(--chat-container-width) / 2));
+	width: var(--chat-container-width);
+	height: 50px;
+	z-index: 10;
+}
+
+.chat-input,
+.chat-button {
+	border: 1px solid lightgray;
+	border-radius: 0.375rem;
+}
+
+.chat-input {
+	background-color: rgba(255, 255, 255, 0.5);
+	backdrop-filter: blur(12px);
+	flex-grow: 1;
+	padding: 1rem;
+}
+
+.chat-input:focus-visible,
+.chat-button:focus-visible {
+	outline-color: grey;
+}
+
+/* .chat-input::-ms-input-placeholder {
+	color: black;
+} */
+
+.chat-button {
+	background-color: darkgray;
+	color: black;
+	cursor: pointer;
+	min-width: 100px;
+}
+
+.chat-button:hover {
+	background-color: lightgrey;
+}
+
+.chat-button:disabled {
+	background-color: rgb(240, 240, 240);
+	cursor: not-allowed;
+}

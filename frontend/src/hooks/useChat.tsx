@@ -1,82 +1,83 @@
-import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from "react";
+import {
+	createContext,
+	FC,
+	PropsWithChildren,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 
-const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 interface ChatContextProps {
-  chat: (message: string) => Promise<void>
-  message: string
-  onMessagePlayed: () => void
-  loading: boolean
-  // cameraZoomed: boolean
-  // setCameraZoomed: React.Dispatch<React.SetStateAction<boolean>>
+	chat: (message: string) => Promise<void>;
+	message: string;
+	onMessagePlayed: () => void;
+	loading: boolean;
+	// cameraZoomed: boolean
+	// setCameraZoomed: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const chatContextInitialState = {
-  chat: async () => { },
-  message: '',
-  onMessagePlayed: () => { },
-  loading: false,
-}
+	chat: async () => {},
+	message: '',
+	onMessagePlayed: () => {},
+	loading: false,
+};
 
 const ChatContext = createContext<ChatContextProps>(chatContextInitialState);
 
-type ChatProviderProps = PropsWithChildren
+type ChatProviderProps = PropsWithChildren;
 
 export const ChatProvider: FC<ChatProviderProps> = ({ children }) => {
-  const [messages, setMessages] = useState<string[]>([]);
-  const [message, setMessage] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-  // const [cameraZoomed, setCameraZoomed] = useState<boolean>(true);
-  const onMessagePlayed = () => {
-    setMessages((messages) => messages.slice(1));
-  };
+	const [messages, setMessages] = useState<string[]>([]);
+	const [message, setMessage] = useState<string>('');
+	const [loading, setLoading] = useState<boolean>(false);
+	// const [cameraZoomed, setCameraZoomed] = useState<boolean>(true);
 
-  const chat = async (message: string) => {
-    setLoading(true);
+	const onMessagePlayed = () => {
+		setMessages((messages) => messages.slice(1));
+	};
 
-    const data = await fetch(`${backendUrl}/chat`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message }),
-    });
+	const chat = async (message: string) => {
+		setLoading(true);
 
-    const resp = (await data.json()).messages;
+		const data = await fetch(`${backendUrl}/chat`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ message }),
+		});
 
-    setMessages((messages) => [...messages, ...resp]);
-    setLoading(false);
-  };
+		const resp = (await data.json()).messages;
 
+		setMessages((messages) => [...messages, ...resp]);
+		setLoading(false);
+	};
 
-  useEffect(() => {
-    if (messages.length > 0) {
-      setMessage(messages[0]);
-    } else {
-      setMessage('');
-    }
-  }, [messages]);
+	useEffect(() => {
+		if (messages.length > 0) {
+			setMessage(messages[0]);
+		} else {
+			setMessage('');
+		}
+	}, [messages]);
 
-  return (
-    <ChatContext.Provider
-      value={{
-        chat,
-        message,
-        onMessagePlayed,
-        loading,
-        // cameraZoomed,
-        // setCameraZoomed,
-      }}
-    >
-      {children}
-    </ChatContext.Provider>
-  );
+	return (
+		<ChatContext.Provider
+			value={{
+				chat,
+				message,
+				onMessagePlayed,
+				loading,
+				// cameraZoomed,
+				// setCameraZoomed,
+			}}
+		>
+			{children}
+		</ChatContext.Provider>
+	);
 };
 
-export const useChat = () => {
-  const context = useContext(ChatContext);
-  if (!context) {
-    throw new Error("useChat must be used within a ChatProvider");
-  }
-  return context;
-};
+export const useChat = () => useContext(ChatContext);

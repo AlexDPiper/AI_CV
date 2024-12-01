@@ -1,15 +1,18 @@
-import { Loader } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { Leva } from "leva";
-import { Experience } from "./components";
+import { Loader } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import { Leva } from 'leva';
 
-const App = () =>
-  <>
-    <Loader />
-    <Leva hidden />
-    <Canvas shadows camera={{ position: [0, 0, 1], fov: 30 }}>
-      <Experience />
-    </Canvas>
-  </>
+import { Experience, UI } from '@app/components';
 
-export default App
+const App = () => (
+	<>
+		<Loader />
+		<Leva hidden />
+		<UI />
+		<Canvas shadows camera={{ position: [0, 0, 1], fov: 30 }}>
+			<Experience />
+		</Canvas>
+	</>
+);
+
+export default App;
