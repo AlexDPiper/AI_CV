@@ -4,15 +4,15 @@ import './UI.css';
 import { useChat } from '@app/hooks';
 
 export const UI: FC<PropsWithChildren> = () => {
-	const { chat, message, loading } = useChat();
-	const [inputMessage, setInputMessage] = useState('');
+	const { chat, incomingSingleMessage: message, loading } = useChat();
+	const [inputUserMessage, setInputUserMessage] = useState('');
 
 	const sendMessage = useCallback(() => {
 		if (!loading && !message) {
-			chat(inputMessage);
-			setInputMessage('');
+			chat(inputUserMessage);
+			setInputUserMessage('');
 		}
-	}, [chat, inputMessage, loading, message]);
+	}, [chat, inputUserMessage, loading, message]);
 
 	return (
 		<div className="chat-container">
@@ -20,9 +20,9 @@ export const UI: FC<PropsWithChildren> = () => {
 				type="text"
 				className="chat-input"
 				placeholder="Type a message..."
-				value={inputMessage}
+				value={inputUserMessage}
 				onChange={(event) => {
-					setInputMessage(event.currentTarget.value);
+					setInputUserMessage(event.currentTarget.value);
 				}}
 				onKeyDown={(event) => {
 					if (event.key === 'Enter') {

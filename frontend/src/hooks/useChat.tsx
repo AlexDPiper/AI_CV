@@ -11,16 +11,14 @@ const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 interface ChatContextProps {
 	chat: (message: string) => Promise<void>;
-	message: string;
+	incomingSingleMessage: string;
 	onMessagePlayed: () => void;
 	loading: boolean;
-	// cameraZoomed: boolean
-	// setCameraZoomed: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const chatContextInitialState = {
+const chatContextInitialState: ChatContextProps = {
 	chat: async () => {},
-	message: '',
+	incomingSingleMessage: '',
 	onMessagePlayed: () => {},
 	loading: false,
 };
@@ -30,13 +28,13 @@ const ChatContext = createContext<ChatContextProps>(chatContextInitialState);
 type ChatProviderProps = PropsWithChildren;
 
 export const ChatProvider: FC<ChatProviderProps> = ({ children }) => {
-	const [messages, setMessages] = useState<string[]>([]);
-	const [message, setMessage] = useState<string>('');
+	const [incomingMessages, setIncomingMessages] = useState<string[]>([]);
+	const [incomingSingleMessage, setIncomingSingleMessage] =
+		useState<string>('');
 	const [loading, setLoading] = useState<boolean>(false);
-	// const [cameraZoomed, setCameraZoomed] = useState<boolean>(true);
 
 	const onMessagePlayed = () => {
-		setMessages((messages) => messages.slice(1));
+		setIncomingMessages((messages) => messages.slice(1));
 	};
 
 	const chat = async (message: string) => {
@@ -52,27 +50,25 @@ export const ChatProvider: FC<ChatProviderProps> = ({ children }) => {
 
 		const resp = (await data.json()).messages;
 
-		setMessages((messages) => [...messages, ...resp]);
+		setIncomingMessages((messages) => [...messages, ...resp]);
 		setLoading(false);
 	};
 
 	useEffect(() => {
-		if (messages.length > 0) {
-			setMessage(messages[0]);
+		if (incomingMessages.length > 0) {
+			setIncomingSingleMessage(incomingMessages[0]);
 		} else {
-			setMessage('');
+			setIncomingSingleMessage('');
 		}
-	}, [messages]);
+	}, [incomingMessages]);
 
 	return (
 		<ChatContext.Provider
 			value={{
 				chat,
-				message,
+				incomingSingleMessage,
 				onMessagePlayed,
 				loading,
-				// cameraZoomed,
-				// setCameraZoomed,
 			}}
 		>
 			{children}
@@ -80,4 +76,5 @@ export const ChatProvider: FC<ChatProviderProps> = ({ children }) => {
 	);
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useChat = () => useContext(ChatContext);
