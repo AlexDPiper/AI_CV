@@ -7,7 +7,8 @@ import {
 	useState,
 } from 'react';
 
-const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const backendUrl: string =
+	import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 interface ChatContextProps {
 	chat: (message: string) => Promise<void>;
@@ -37,7 +38,7 @@ export const ChatProvider: FC<ChatProviderProps> = ({ children }) => {
 		setIncomingMessages((messages) => messages.slice(1));
 	};
 
-	const chat = async (message: string) => {
+	const chat = async (outcomingMessage: string) => {
 		setLoading(true);
 
 		const data = await fetch(`${backendUrl}/chat`, {
@@ -45,7 +46,7 @@ export const ChatProvider: FC<ChatProviderProps> = ({ children }) => {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ message }),
+			body: JSON.stringify({ message: outcomingMessage }),
 		});
 
 		const resp = (await data.json()).messages;
